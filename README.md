@@ -6,6 +6,9 @@ Includes:
 - Custom controls
 - MIME validation
 - Folder navigation
+- Target framework: .NET 8.0
+
+**Disclaimer: saving your pictures' tags in the filename is not the way to go. This was mostly an experiment.**
 
 The only reason I'm publishing this is because I found a way around the memory leaking bitmap type in .Net.
 Loading new pictures to a pictureBox by the way of repeated Bitmap instances is a serious memory eater.
