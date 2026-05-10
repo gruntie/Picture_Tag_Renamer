@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             tagSearch = new TextBox();
             label1 = new Label();
@@ -62,6 +63,7 @@
             exitToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
+            toolTip1 = new ToolTip(components);
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureViewer).BeginInit();
@@ -148,6 +150,7 @@
             btnComposedNameCopy.Name = "btnComposedNameCopy";
             btnComposedNameCopy.Size = new Size(32, 23);
             btnComposedNameCopy.TabIndex = 7;
+            toolTip1.SetToolTip(btnComposedNameCopy, "Copy the selected tags to the clipboard.");
             btnComposedNameCopy.UseVisualStyleBackColor = true;
             btnComposedNameCopy.Click += btnComposedNameCopy_Click;
             // 
@@ -176,6 +179,7 @@
             btnReset.Size = new Size(75, 23);
             btnReset.TabIndex = 11;
             btnReset.Text = "&Reset";
+            toolTip1.SetToolTip(btnReset, "Clear the selected tags.");
             btnReset.UseVisualStyleBackColor = true;
             btnReset.Click += btnReset_Click;
             // 
@@ -186,6 +190,7 @@
             btnRename.Size = new Size(75, 23);
             btnRename.TabIndex = 8;
             btnRename.Text = "&Rename";
+            toolTip1.SetToolTip(btnRename, "Save the selected tags into the file name.");
             btnRename.UseVisualStyleBackColor = true;
             btnRename.Click += btnRename_Click;
             // 
@@ -244,6 +249,7 @@
             btnPicturePrevious.Size = new Size(22, 23);
             btnPicturePrevious.TabIndex = 0;
             btnPicturePrevious.Text = "<";
+            toolTip1.SetToolTip(btnPicturePrevious, "Go to previous file (if handling multiple files).");
             btnPicturePrevious.UseVisualStyleBackColor = true;
             btnPicturePrevious.Click += btnPicturePrevious_Click;
             // 
@@ -256,6 +262,7 @@
             btnPictureNext.Size = new Size(22, 23);
             btnPictureNext.TabIndex = 1;
             btnPictureNext.Text = ">";
+            toolTip1.SetToolTip(btnPictureNext, "Go to next file (if handling multiple files).");
             btnPictureNext.UseVisualStyleBackColor = true;
             btnPictureNext.Click += btnPictureNext_Click;
             // 
@@ -280,6 +287,7 @@
             btnPictureZoomOut.Size = new Size(23, 23);
             btnPictureZoomOut.TabIndex = 2;
             btnPictureZoomOut.Text = "-";
+            toolTip1.SetToolTip(btnPictureZoomOut, "Make picture smaller.");
             btnPictureZoomOut.UseVisualStyleBackColor = true;
             btnPictureZoomOut.Click += btnPictureZoomOut_Click;
             // 
@@ -292,6 +300,7 @@
             btnPictureZoomReset.Size = new Size(23, 23);
             btnPictureZoomReset.TabIndex = 4;
             btnPictureZoomReset.Text = "[]";
+            toolTip1.SetToolTip(btnPictureZoomReset, "Fit picture size in the viewer.");
             btnPictureZoomReset.UseVisualStyleBackColor = true;
             btnPictureZoomReset.Click += btnPictureZoomReset_Click;
             // 
@@ -303,6 +312,7 @@
             btnPictureZoomIn.Size = new Size(23, 23);
             btnPictureZoomIn.TabIndex = 3;
             btnPictureZoomIn.Text = "+";
+            toolTip1.SetToolTip(btnPictureZoomIn, "Make picture bigger.");
             btnPictureZoomIn.UseVisualStyleBackColor = true;
             btnPictureZoomIn.Click += btnPictureZoomIn_Click;
             // 
@@ -471,5 +481,6 @@
         private Label labelNewName;
         private Button btnRename;
         private Button btnReset;
+        private ToolTip toolTip1;
     }
 }
