@@ -41,6 +41,101 @@ namespace DanbooruNameTagger
             tagSearch.AutoCompleteSource = AutoCompleteSource.CustomSource;
         }
 
+        public string GetSafeFileName(string input) 
+        { 
+            return Path.GetFileName(input); 
+        }
+
+        public void LoadSingleFile(string path)
+        {
+            if (File.Exists(path))
+            {
+                FilePath = path;
+                byte[] buffer = new byte[16];
+                int bytesRead = 0;
+                using (FileStream fs = new FileStream(FilePath, FileMode.Open, FileAccess.Read))
+                {
+                    bytesRead = fs.Read(buffer, 0, buffer.Length);
+                    fs.Close();
+                }
+                string filename = GetSafeFileName(FilePath);
+                string mime = MimeType.GetMimeType(buffer, filename);
+
+                if (Util.pictures.Contains(mime))
+                {
+                    IsFileMode = true;
+                    IsFolderMode = false;
+                    if (pictureViewer.Image != null)
+                    {
+                        pictureViewer.Image.Dispose();
+                    }
+                    pictureViewer.SizeMode = PictureBoxSizeMode.Zoom;
+                    pictureViewer.Image = Image.FromFile(FilePath);
+
+                    labelCurrentName.Text = filename;
+                    labelNewName.Text = filename;
+                }
+                else
+                {
+                    IsFileMode = false;
+                    IsFolderMode = false;
+                    MessageBox.Show("Selected file is not a picture.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            else 
+            { 
+                return; 
+            }
+        }
+
+        public void LoadMultipleFiles(string[] filepaths)
+        {
+            try
+            {
+                IsFileMode = false;
+                IsFolderMode = true;
+
+                Files = filepaths;
+                byte[] buffer = new byte[16];
+                int bytesRead = 0;
+                string filename = string.Empty;
+
+                foreach (string file in Files)
+                {
+                    //buffer = File.ReadAllBytes(file);
+                    using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read))
+                    {
+                        bytesRead = fs.Read(buffer, 0, buffer.Length);
+                        fs.Close();
+                    }
+                    filename = file.Split('\\')[file.Split('\\').Length - 1];
+                    string mime = MimeType.GetMimeType(buffer, filename);
+
+                    if (!Util.pictures.Contains(mime))
+                    {
+                        Files = Files.Except(new string[] { file }).ToArray();
+                    }
+                }
+
+                FilePath = Files[FilePointer];
+                filename = FilePath.Split('\\')[FilePath.Split('\\').Length - 1];
+                if (pictureViewer.Image != null)
+                {
+                    pictureViewer.Image.Dispose();
+                }
+                pictureViewer.SizeMode = PictureBoxSizeMode.Zoom;
+                pictureViewer.Image = Image.FromFile(Files[FilePointer]);
+                labelCurrentName.Text = filename;
+                labelNewName.Text = filename;
+            }
+            catch (Exception ex)
+            {
+                IsFileMode = false;
+                IsFolderMode = false;
+                Files = new string[0];
+            }
+        }
+
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == (Keys.Control | Keys.C))
@@ -139,6 +234,39 @@ namespace DanbooruNameTagger
             this.CenterToScreen();
         }
 
+        /* DRAG AND DROP */
+        private void MainForm_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effect= DragDropEffects.None;
+            }
+        }
+
+        private void MainForm_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] filePaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            if (filePaths.Length == 0)
+            {
+                return;
+            }
+
+            if (filePaths.Length == 1)
+            {
+                LoadSingleFile(filePaths[0]);
+            }
+
+            if (filePaths.Length > 1)
+            {
+                LoadMultipleFiles(filePaths);
+            }
+        }
+
         private void tagSearch_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -201,9 +329,17 @@ namespace DanbooruNameTagger
 
             if (result == DialogResult.OK && File.Exists(openFileDialog.FileName))
             {
-                FilePath = openFileDialog.FileName;
+                //FilePath = openFileDialog.FileName;
 
-                byte[] buffer = new byte[16];
+                try
+                {
+                    LoadSingleFile(openFileDialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Could not load the selected file.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                /*byte[] buffer = new byte[16];
                 int bytesRead = 0;
                 using (FileStream fs = new FileStream(FilePath, FileMode.Open, FileAccess.Read))
                 {
@@ -232,7 +368,7 @@ namespace DanbooruNameTagger
                     IsFileMode = false;
                     IsFolderMode = false;
                     MessageBox.Show("Selected file is not a picture.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
+                }*/
             }
         }
 
@@ -244,7 +380,15 @@ namespace DanbooruNameTagger
 
             if (result == DialogResult.OK && !string.IsNullOrEmpty(folderBrowserDialog.SelectedPath))
             {
-                IsFileMode = false;
+                try
+                {
+                    LoadMultipleFiles(Directory.GetFiles(folderBrowserDialog.SelectedPath, "*.*", SearchOption.TopDirectoryOnly));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Could not load the selected path.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                /*IsFileMode = false;
                 IsFolderMode = true;
 
                 try
@@ -287,7 +431,7 @@ namespace DanbooruNameTagger
                     IsFileMode = false;
                     IsFolderMode = false;
                     Files = new string[0];
-                }
+                }*/
             }
         }
 

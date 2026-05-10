@@ -38,6 +38,7 @@
             nameSpacesCheck = new CheckBox();
             btnComposedNameCopy = new Button();
             panel1 = new Panel();
+            btnReset = new Button();
             btnRename = new Button();
             panel2 = new Panel();
             pictureViewer = new PictureBox();
@@ -61,7 +62,6 @@
             exitToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
-            btnReset = new Button();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureViewer).BeginInit();
@@ -168,6 +168,16 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(248, 394);
             panel1.TabIndex = 8;
+            // 
+            // btnReset
+            // 
+            btnReset.Location = new Point(155, 343);
+            btnReset.Name = "btnReset";
+            btnReset.Size = new Size(75, 23);
+            btnReset.TabIndex = 11;
+            btnReset.Text = "&Reset";
+            btnReset.UseVisualStyleBackColor = true;
+            btnReset.Click += btnReset_Click;
             // 
             // btnRename
             // 
@@ -276,11 +286,12 @@
             // btnPictureZoomReset
             // 
             btnPictureZoomReset.FlatStyle = FlatStyle.Flat;
+            btnPictureZoomReset.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnPictureZoomReset.Location = new Point(39, 22);
             btnPictureZoomReset.Name = "btnPictureZoomReset";
             btnPictureZoomReset.Size = new Size(23, 23);
             btnPictureZoomReset.TabIndex = 4;
-            btnPictureZoomReset.Text = "1";
+            btnPictureZoomReset.Text = "[]";
             btnPictureZoomReset.UseVisualStyleBackColor = true;
             btnPictureZoomReset.Click += btnPictureZoomReset_Click;
             // 
@@ -393,18 +404,9 @@
             aboutToolStripMenuItem.Size = new Size(107, 22);
             aboutToolStripMenuItem.Text = "About";
             // 
-            // btnReset
-            // 
-            btnReset.Location = new Point(155, 343);
-            btnReset.Name = "btnReset";
-            btnReset.Size = new Size(75, 23);
-            btnReset.TabIndex = 11;
-            btnReset.Text = "&Reset";
-            btnReset.UseVisualStyleBackColor = true;
-            btnReset.Click += btnReset_Click;
-            // 
             // MainForm
             // 
+            AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(834, 541);
@@ -418,6 +420,8 @@
             Name = "MainForm";
             Text = "Danbooru Name Tagger";
             Load += MainForm_Load;
+            DragDrop += MainForm_DragDrop;
+            DragEnter += MainForm_DragEnter;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             panel2.ResumeLayout(false);
